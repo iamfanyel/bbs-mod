@@ -15,6 +15,7 @@ import mchorse.bbs_mod.data.types.BaseType;
 import mchorse.bbs_mod.film.BaseFilmController;
 import mchorse.bbs_mod.film.Film;
 import mchorse.bbs_mod.film.FilmControllerContext;
+import mchorse.bbs_mod.film.Recorder;
 import mchorse.bbs_mod.film.replays.Replay;
 import mchorse.bbs_mod.film.replays.ReplayKeyframes;
 import mchorse.bbs_mod.forms.FormUtilsClient;
@@ -27,7 +28,7 @@ import mchorse.bbs_mod.l10n.keys.IKey;
 import mchorse.bbs_mod.morphing.Morph;
 import mchorse.bbs_mod.network.ClientNetwork;
 import mchorse.bbs_mod.resources.Link;
-import mchorse.bbs_mod.settings.values.ValueOnionSkin;
+import mchorse.bbs_mod.settings.values.ui.ValueOnionSkin;
 import mchorse.bbs_mod.settings.values.base.BaseValue;
 import mchorse.bbs_mod.ui.Keys;
 import mchorse.bbs_mod.ui.UIKeys;
@@ -525,9 +526,9 @@ public class UIFilmController extends UIElement
             BaseType newData = replay.keyframes.toData();
 
             replay.keyframes.fromData(this.recordingOld);
-            replay.keyframes.preNotifyParent();
+            replay.keyframes.preNotify();
             replay.keyframes.fromData(newData);
-            replay.keyframes.postNotifyParent();
+            replay.keyframes.postNotify();
 
             this.recordingOld = null;
         }
@@ -1116,6 +1117,13 @@ public class UIFilmController extends UIElement
         if (this.editorController != null)
         {
             this.editorController.render(context);
+
+            int povMode = this.panel.getController().getPovMode();
+
+            if (povMode != UIFilmController.CAMERA_MODE_CAMERA)
+            {
+                Recorder.renderCameraPreview(this.panel.getRunner().getPosition(), context.camera(), context.matrixStack());
+            }
         }
 
         Mouse mouse = MinecraftClient.getInstance().mouse;
@@ -1223,18 +1231,24 @@ public class UIFilmController extends UIElement
             {
                 this.stencilMap.objectIndex = entry.getKey() + 1;
 
+                Replay replay = CollectionUtils.getSafe(this.panel.getData().replays.getList(), entry.getKey());
+
                 BaseFilmController.renderEntity(FilmControllerContext.instance
-                    .setup(this.getEntities(), entry.getValue(), renderContext)
+                    .setup(this.getEntities(), entry.getValue(), replay, renderContext)
                     .transition(isPlaying ? renderContext.tickDelta() : 0)
-                    .stencil(this.stencilMap));
+                    .stencil(this.stencilMap)
+                    .relative(replay.relative.get()));
             }
         }
         else
         {
+            Replay replay = CollectionUtils.getSafe(this.panel.getData().replays.getList(), this.panel.replayEditor.replays.replays.getIndex());
+
             BaseFilmController.renderEntity(FilmControllerContext.instance
-                .setup(this.getEntities(), entity, renderContext)
+                .setup(this.getEntities(), entity, replay, renderContext)
                 .transition(isPlaying ? renderContext.tickDelta() : 0)
-                .stencil(this.stencilMap));
+                .stencil(this.stencilMap)
+                .relative(replay.relative.get()));
         }
 
         int x = (int) ((context.mouseX - viewport.x) / (float) viewport.w * mainTexture.width);

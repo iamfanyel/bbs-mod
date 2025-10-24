@@ -79,8 +79,6 @@ public class UIKeys
     public static final IKey CAMERA_PANELS_AUDIO_OFFSET = L10n.lang("bbs.ui.camera.panels.audio.offset");
     public static final IKey CAMERA_PANELS_AUDIO_PICK_AUDIO = L10n.lang("bbs.ui.camera.panels.audio.pick_audio");
     public static final IKey CAMERA_PANELS_BLOCK = L10n.lang("bbs.ui.camera.panels.block");
-    public static final IKey CAMERA_PANELS_CIRCLE = L10n.lang("bbs.ui.camera.panels.circle");
-    public static final IKey CAMERA_PANELS_CIRCLES = L10n.lang("bbs.ui.camera.panels.circles");
     public static final IKey CAMERA_PANELS_CONTEXT_COPY_ANGLE = L10n.lang("bbs.ui.camera.panels.context.copy_angle");
     public static final IKey CAMERA_PANELS_CONTEXT_COPY_POINT = L10n.lang("bbs.ui.camera.panels.context.copy_point");
     public static final IKey CAMERA_PANELS_CONTEXT_COPY_POSITION = L10n.lang("bbs.ui.camera.panels.context.copy_position");
@@ -91,6 +89,9 @@ public class UIKeys
     public static final IKey CAMERA_PANELS_CONTEXT_PASTE_POSITION = L10n.lang("bbs.ui.camera.panels.context.paste_position");
     public static final IKey CAMERA_PANELS_COPY_ENTITY = L10n.lang("bbs.ui.camera.panels.copy_entity");
     public static final IKey CAMERA_PANELS_COPY_ENTITY_TOOLTIP = L10n.lang("bbs.ui.camera.panels.copy_entity_tooltip");
+    public static final IKey CAMERA_PANELS_CURVES_BRIGHTNESS = L10n.lang("bbs.ui.camera.panels.curves.brightness");
+    public static final IKey CAMERA_PANELS_CURVES_SUN_ROTATION = L10n.lang("bbs.ui.camera.panels.curves.sun_rotation");
+    public static final IKey CAMERA_PANELS_CURVES_WEATHER = L10n.lang("bbs.ui.camera.panels.curves.weather");
     public static final IKey CAMERA_PANELS_CURVE_ADD = L10n.lang("bbs.ui.camera.panels.curve.add");
     public static final IKey CAMERA_PANELS_CURVE_REMOVE = L10n.lang("bbs.ui.camera.panels.curve.remove");
     public static final IKey CAMERA_PANELS_DETERMINISTIC = L10n.lang("bbs.ui.camera.panels.deterministic");
@@ -147,6 +148,7 @@ public class UIKeys
     public static final IKey CAMERA_PANELS_SUBTITLE_OPAQUE = L10n.lang("bbs.ui.camera.panels.subtitle.opaque");
     public static final IKey CAMERA_PANELS_SUBTITLE_SHADOW = L10n.lang("bbs.ui.camera.panels.subtitle.shadow");
     public static final IKey CAMERA_PANELS_SUBTITLE_SIZE = L10n.lang("bbs.ui.camera.panels.subtitle.size");
+    public static final IKey CAMERA_PANELS_SUBTITLE_TEXT_SHADOW = L10n.lang("bbs.ui.camera.panels.subtitle.text_shadow");
     public static final IKey CAMERA_PANELS_SUBTITLE_TRANSFORM = L10n.lang("bbs.ui.camera.panels.subtitle.transform");
     public static final IKey CAMERA_PANELS_SUBTITLE_WINDOW = L10n.lang("bbs.ui.camera.panels.subtitle.window");
     public static final IKey CAMERA_PANELS_TARGET = L10n.lang("bbs.ui.camera.panels.target");
@@ -252,6 +254,7 @@ public class UIKeys
     public static final IKey FILM_RENDER_AUDIO = L10n.lang("bbs.ui.film.render_audio");
     public static final IKey FILM_RENDER_AUDIO_ERROR = L10n.lang("bbs.ui.film.render_audio.error");
     public static final IKey FILM_RENDER_AUDIO_SUCCESS = L10n.lang("bbs.ui.film.render_audio.success");
+    public static final IKey FILM_REPLACE_INVENTORY = L10n.lang("bbs.ui.film.replace_inventory");
     public static final IKey FILM_REPLAY_ACTOR = L10n.lang("bbs.ui.film.replay.actor");
     public static final IKey FILM_REPLAY_ACTOR_TOOLTIP = L10n.lang("bbs.ui.film.replay.actor-tooltip");
     public static final IKey FILM_REPLAY_ANIMATION_TO_POSE_GENERATE = L10n.lang("bbs.ui.film.replay.animation_to_pose.generate");
@@ -277,6 +280,7 @@ public class UIKeys
     public static final IKey FILM_REPLAY_ORBIT_THIRD_PERSON_BACK = L10n.lang("bbs.ui.film.replay.orbit.third_person_back");
     public static final IKey FILM_REPLAY_ORBIT_THIRD_PERSON_FRONT = L10n.lang("bbs.ui.film.replay.orbit.third_person_front");
     public static final IKey FILM_REPLAY_RECORD = L10n.lang("bbs.ui.film.replay.record");
+    public static final IKey FILM_REPLAY_RELATIVE_TOOLTIP = L10n.lang("bbs.ui.film.replay.relative-tooltip");
     public static final IKey FILM_REPLAY_REPLAY = L10n.lang("bbs.ui.film.replay.replay");
     public static final IKey FILM_REPLAY_SHADOW = L10n.lang("bbs.ui.film.replay.shadow");
     public static final IKey FILM_REPLAY_SHADOW_SIZE = L10n.lang("bbs.ui.film.replay.shadow_size");
@@ -346,7 +350,7 @@ public class UIKeys
     public static final IKey FORMS_EDITORS_EXTRUDED_TITLE = L10n.lang("bbs.ui.forms.editors.extruded.title");
     public static final IKey FORMS_EDITORS_GENERAL = L10n.lang("bbs.ui.forms.editors.general");
     public static final IKey FORMS_EDITORS_GENERAL_ANIMATABLE = L10n.lang("bbs.ui.forms.editors.general.animatable");
-    public static final IKey FORMS_EDITORS_GENERAL_ANIMATABLET_TOOLTIP = L10n.lang("bbs.ui.forms.editors.general.animatable-tooltip");
+    public static final IKey FORMS_EDITORS_GENERAL_ANIMATABLE_TOOLTIP = L10n.lang("bbs.ui.forms.editors.general.animatable-tooltip");
     public static final IKey FORMS_EDITORS_GENERAL_DISPLAY = L10n.lang("bbs.ui.forms.editors.general.display");
     public static final IKey FORMS_EDITORS_GENERAL_HITBOX = L10n.lang("bbs.ui.forms.editors.general.hitbox");
     public static final IKey FORMS_EDITORS_GENERAL_HITBOX_EYE_HEIGHT = L10n.lang("bbs.ui.forms.editors.general.hitbox_eye_height");
@@ -361,6 +365,7 @@ public class UIKeys
     public static final IKey FORMS_EDITORS_GENERAL_MOVEMENT_SPEED_TOOLTIP = L10n.lang("bbs.ui.forms.editors.general.movement_speed-tooltip");
     public static final IKey FORMS_EDITORS_GENERAL_SHADER_SHADOW = L10n.lang("bbs.ui.forms.editors.general.shader_shadow");
     public static final IKey FORMS_EDITORS_GENERAL_STEP_HEIGHT = L10n.lang("bbs.ui.forms.editors.general.step_height");
+    public static final IKey FORMS_EDITORS_GENERAL_TRACK_NAME_TOOLTIP = L10n.lang("bbs.ui.forms.editors.general.track_name-tooltip");
     public static final IKey FORMS_EDITORS_GENERAL_UI_SCALE = L10n.lang("bbs.ui.forms.editors.general.ui_scale");
     public static final IKey FORMS_EDITORS_GENERAL_VISIBLE = L10n.lang("bbs.ui.forms.editors.general.visible");
     public static final IKey FORMS_EDITORS_ITEM_TITLE = L10n.lang("bbs.ui.forms.editors.item.title");
@@ -412,6 +417,8 @@ public class UIKeys
     public static final IKey FORMS_LIST_SEARCH = L10n.lang("bbs.ui.forms.list.search");
     public static final IKey FORMS_SHARED_NOTIFICATION = L10n.lang("bbs.ui.forms.categories.shared-notification");
     public static final IKey GENERAL_ADD = L10n.lang("bbs.ui.add");
+    public static final IKey GENERAL_CLOSE = L10n.lang("bbs.ui.close");
+    public static final IKey GENERAL_CONFIRM = L10n.lang("bbs.ui.confirm");
     public static final IKey GENERAL_COPY = L10n.lang("bbs.ui.copy");
     public static final IKey GENERAL_DUPE = L10n.lang("bbs.ui.dupe");
     public static final IKey GENERAL_EDIT = L10n.lang("bbs.ui.edit");
@@ -503,6 +510,7 @@ public class UIKeys
     public static final IKey INTERPOLATIONS_CONTEXT_COPY = L10n.lang("interpolations.ui.context.copy");
     public static final IKey INTERPOLATIONS_CONTEXT_PASTE = L10n.lang("interpolations.ui.context.paste");
     public static final IKey INTERPOLATIONS_KEY_CATEGORY = L10n.lang("interpolations.key_category");
+    public static final IKey ITEM_STACK_CONTEXT_HOTBAR = L10n.lang("bbs.ui.item_stack.context.hotbar");
     public static final IKey ITEM_STACK_CONTEXT_PASTE = L10n.lang("bbs.ui.item_stack.context.paste");
     public static final IKey ITEM_STACK_CONTEXT_RESET = L10n.lang("bbs.ui.item_stack.context.reset");
     public static final IKey KEYFRAMES_CONTEXT_ADJUST_VALUES = L10n.lang("bbs.ui.keyframes.context.adjust_values");
@@ -751,12 +759,6 @@ public class UIKeys
     public static final IKey SNOWSTORM_SPACE_TITLE = L10n.lang("bbs.ui.snowstorm.space.title");
     public static final IKey SNOWSTORM_SPACE_VELOCITY = L10n.lang("bbs.ui.snowstorm.space.velocity");
     public static final IKey SNOWSTORM_TITLE = L10n.lang("bbs.ui.snowstorm.title");
-    public static final IKey STATE_TRIGGERS_CONTEXT_ADD = L10n.lang("bbs.ui.state_triggers.context.add");
-    public static final IKey STATE_TRIGGERS_CONTEXT_REMOVE = L10n.lang("bbs.ui.state_triggers.context.remove");
-    public static final IKey STATE_TRIGGERS_EDIT = L10n.lang("bbs.ui.state_triggers.edit");
-    public static final IKey STATE_TRIGGERS_RMB_HERE = L10n.lang("bbs.ui.state_triggers.rmb_here");
-    public static final IKey STATE_TRIGGERS_TITLE = L10n.lang("bbs.ui.state_triggers.title");
-    public static final IKey SUPPORTERS_CALL_TO_ACTION = L10n.lang("bbs.ui.supporters.call_to_action");
     public static final IKey SUPPORTERS_CC = L10n.lang("bbs.ui.supporters.cc");
     public static final IKey SUPPORTERS_COMMUNITY = L10n.lang("bbs.ui.supporters.community");
     public static final IKey SUPPORTERS_COMMUNITY_LINK = L10n.lang("bbs.ui.supporters.community_link");
@@ -764,7 +766,6 @@ public class UIKeys
     public static final IKey SUPPORTERS_DONATE_LINK = L10n.lang("bbs.ui.supporters.donate_link");
     public static final IKey SUPPORTERS_EARLY_ACCESS = L10n.lang("bbs.ui.supporters.early_access");
     public static final IKey SUPPORTERS_GRATITUDE = L10n.lang("bbs.ui.supporters.gratitude");
-    public static final IKey SUPPORTERS_INTRO = L10n.lang("bbs.ui.supporters.intro");
     public static final IKey SUPPORTERS_SUPER_SUPPORTERS = L10n.lang("bbs.ui.supporters.super_supporters");
     public static final IKey SUPPORTERS_TITLE = L10n.lang("bbs.ui.supporters.title");
     public static final IKey SUPPORTERS_TUTORIALS = L10n.lang("bbs.ui.supporters.tutorials");
@@ -772,15 +773,11 @@ public class UIKeys
     public static final IKey SUPPORTERS_WIKI = L10n.lang("bbs.ui.supporters.wiki");
     public static final IKey SUPPORTERS_WIKI_LINK = L10n.lang("bbs.ui.supporters.wiki_link");
     public static final IKey TEXTURES_COPY = L10n.lang("bbs.ui.textures.copy");
-    public static final IKey TEXTURES_DISCARD_DESCRIPTION = L10n.lang("bbs.ui.textures.discard-description");
-    public static final IKey TEXTURES_DISCARD_TITLE = L10n.lang("bbs.ui.textures.discard-title");
     public static final IKey TEXTURES_DOWNLOAD = L10n.lang("bbs.ui.textures.download");
     public static final IKey TEXTURES_DOWNLOAD_DESCRIPTION = L10n.lang("bbs.ui.textures.download-description");
     public static final IKey TEXTURES_DOWNLOAD_FILENAME = L10n.lang("bbs.ui.textures.download.filename");
     public static final IKey TEXTURES_DOWNLOAD_TITLE = L10n.lang("bbs.ui.textures.download-title");
     public static final IKey TEXTURES_DOWNLOAD_URL = L10n.lang("bbs.ui.textures.download.url");
-    public static final IKey TEXTURES_EDIT = L10n.lang("bbs.ui.textures.edit");
-    public static final IKey TEXTURES_EXPORT = L10n.lang("bbs.ui.textures.export");
     public static final IKey TEXTURES_EXPORT_OVERLAY_ERROR = L10n.lang("bbs.ui.textures.export_overlay.error");
     public static final IKey TEXTURES_EXPORT_OVERLAY_OPEN_FOLDER = L10n.lang("bbs.ui.textures.export_overlay.open_folder");
     public static final IKey TEXTURES_EXPORT_OVERLAY_SUCCESS = L10n.lang("bbs.ui.textures.export_overlay.success");
@@ -799,13 +796,11 @@ public class UIKeys
     public static final IKey TEXTURES_KEYS_UNDO = L10n.lang("bbs.ui.textures.keys.undo");
     public static final IKey TEXTURES_LINEAR = L10n.lang("bbs.ui.textures.linear");
     public static final IKey TEXTURES_MIPMAP = L10n.lang("bbs.ui.textures.mipmap");
-    public static final IKey TEXTURES_REFRESH = L10n.lang("bbs.ui.textures.refresh");
     public static final IKey TEXTURES_RESIZE = L10n.lang("bbs.ui.textures.resize");
     public static final IKey TEXTURES_RESIZE_DESCRIPTION = L10n.lang("bbs.ui.textures.resize-description");
     public static final IKey TEXTURES_RESIZE_TITLE = L10n.lang("bbs.ui.textures.resize-title");
     public static final IKey TEXTURES_SAVE = L10n.lang("bbs.ui.textures.save");
     public static final IKey TEXTURES_SAVE_WRONG_PATH = L10n.lang("bbs.ui.textures.save_wrong_path");
-    public static final IKey TEXTURES_TITLE = L10n.lang("bbs.ui.textures.title");
     public static final IKey TEXTURES_TOOLTIP = L10n.lang("bbs.ui.textures.tooltip");
     public static final IKey TEXTURES_VIEWER_BRIGHTNESS = L10n.lang("bbs.ui.textures.viewer.brightness");
     public static final IKey TEXTURES_VIEWER_CONTEXT_COPY_HEX = L10n.lang("bbs.ui.textures.viewer.context.copy_hex");

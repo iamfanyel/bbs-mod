@@ -4,9 +4,9 @@ import mchorse.bbs_mod.BBSSettings;
 import mchorse.bbs_mod.graphics.window.Window;
 import mchorse.bbs_mod.l10n.keys.IKey;
 import mchorse.bbs_mod.math.MathBuilder;
-import mchorse.bbs_mod.settings.values.ValueDouble;
-import mchorse.bbs_mod.settings.values.ValueFloat;
-import mchorse.bbs_mod.settings.values.ValueInt;
+import mchorse.bbs_mod.settings.values.numeric.ValueDouble;
+import mchorse.bbs_mod.settings.values.numeric.ValueFloat;
+import mchorse.bbs_mod.settings.values.numeric.ValueInt;
 import mchorse.bbs_mod.ui.UIKeys;
 import mchorse.bbs_mod.ui.framework.UIContext;
 import mchorse.bbs_mod.ui.framework.elements.events.UITrackpadDragEndEvent;
@@ -62,6 +62,7 @@ public class UITrackpad extends UIBaseTextbox
     public boolean onlyNumbers;
 
     public boolean relative;
+    public boolean allowCanceling = true;
     public IKey forcedLabel;
 
     /* Value dragging fields */
@@ -210,6 +211,13 @@ public class UITrackpad extends UIBaseTextbox
         return this;
     }
 
+    public UITrackpad disableCanceling()
+    {
+        this.allowCanceling = false;
+
+        return this;
+    }
+
     /* Values presets */
 
     public UITrackpad degrees()
@@ -252,13 +260,12 @@ public class UITrackpad extends UIBaseTextbox
     public void setValue(double value)
     {
         this.setValueInternal(value);
-        this.textbox.setText(this.integer ? FORMAT.format((int) this.value) : FORMAT.format(this.value));
+        this.textbox.setText(this.integer ? String.valueOf((int) this.value) : String.valueOf(this.value));
         this.textbox.moveCursorToStart();
     }
 
     private void setValueInternal(double value)
     {
-        value = Math.round(value * 1000F) / 1000F;
         value = MathUtils.clamp(value, this.min, this.max);
 
         if (this.integer)
@@ -331,6 +338,17 @@ public class UITrackpad extends UIBaseTextbox
     @Override
     public boolean subMouseClicked(UIContext context)
     {
+        if (this.allowCanceling && context.mouseButton == 1 && this.isDragging())
+        {
+            this.setValueAndNotify(this.lastValue);
+
+            this.wasInside = false;
+            this.dragging = false;
+            this.shiftX = 0;
+
+            return true;
+        }
+
         if (context.mouseButton == 2 && this.area.isInside(context))
         {
             this.setValueAndNotify(-this.value);
@@ -381,6 +399,17 @@ public class UITrackpad extends UIBaseTextbox
     @Override
     public boolean subMouseReleased(UIContext context)
     {
+        if (context.mouseButton == 1 && this.isDragging())
+        {
+            this.setValueAndNotify(this.lastValue);
+
+            this.wasInside = false;
+            this.dragging = false;
+            this.shiftX = 0;
+
+            return true;
+        }
+
         this.textbox.mouseReleased(context.mouseX, context.mouseY, context.mouseButton);
 
         if (context.mouseButton == 0 && !this.isDraggingTime() && !this.textbox.isFocused())
@@ -626,7 +655,7 @@ public class UITrackpad extends UIBaseTextbox
             }
 
             FontRenderer font = context.batcher.getFont();
-            String label = this.forcedLabel == null ? this.textbox.getText() : this.forcedLabel.get();
+            String label = this.forcedLabel == null ? FORMAT.format(this.value) : this.forcedLabel.get();
             int lx = this.area.mx(font.getWidth(label));
             int ly = this.area.my() - font.getHeight() / 2;
 
@@ -691,7 +720,7 @@ public class UITrackpad extends UIBaseTextbox
                         double diff = (Math.abs(dx) - 3) * value;
                         double newValue = this.lastValue + (dx < 0 ? -diff : diff);
 
-                        newValue = diff < 0 ? this.lastValue : Math.round(newValue * 1000F) / 1000F;
+                        newValue = diff < 0 ? this.lastValue : newValue;
 
                         if (this.value != newValue)
                         {

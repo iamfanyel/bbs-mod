@@ -1,5 +1,6 @@
 package mchorse.bbs_mod;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import mchorse.bbs_mod.actions.types.FormTriggerClientActionClip;
 import mchorse.bbs_mod.audio.SoundManager;
 import mchorse.bbs_mod.camera.clips.ClipFactoryData;
@@ -24,6 +25,7 @@ import mchorse.bbs_mod.forms.forms.Form;
 import mchorse.bbs_mod.forms.forms.ModelForm;
 import mchorse.bbs_mod.forms.renderers.ModelFormRenderer;
 import mchorse.bbs_mod.forms.triggers.StateTrigger;
+import mchorse.bbs_mod.graphics.Draw;
 import mchorse.bbs_mod.graphics.FramebufferManager;
 import mchorse.bbs_mod.graphics.texture.TextureManager;
 import mchorse.bbs_mod.items.GunProperties;
@@ -39,7 +41,6 @@ import mchorse.bbs_mod.resources.packs.URLRepository;
 import mchorse.bbs_mod.resources.packs.URLSourcePack;
 import mchorse.bbs_mod.resources.packs.URLTextureErrorCallback;
 import mchorse.bbs_mod.selectors.EntitySelectors;
-import mchorse.bbs_mod.settings.values.ValueLanguage;
 import mchorse.bbs_mod.ui.UIKeys;
 import mchorse.bbs_mod.ui.dashboard.UIDashboard;
 import mchorse.bbs_mod.ui.film.UIFilmPanel;
@@ -53,8 +54,8 @@ import mchorse.bbs_mod.ui.utils.keys.KeybindSettings;
 import mchorse.bbs_mod.utils.MathUtils;
 import mchorse.bbs_mod.utils.ScreenshotRecorder;
 import mchorse.bbs_mod.utils.VideoRecorder;
+import mchorse.bbs_mod.utils.colors.Color;
 import mchorse.bbs_mod.utils.colors.Colors;
-import mchorse.bbs_mod.utils.iris.ShaderCurves;
 import mchorse.bbs_mod.utils.resources.MinecraftSourcePack;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -68,8 +69,15 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.impl.client.rendering.BlockEntityRendererRegistryImpl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.BufferRenderer;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.Window;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
@@ -294,7 +302,7 @@ public class BBSModClient implements ClientModInitializer
         selectors.read();
         films = new Films();
 
-        BBSResources.init(parentFile);
+        BBSResources.init();
 
         URLRepository repository = new URLRepository(new File(parentFile, "url_cache"));
 
@@ -305,7 +313,7 @@ public class BBSModClient implements ClientModInitializer
 
         BBSMod.setupConfig(Icons.KEY_CAP, "keybinds", new File(BBSMod.getSettingsFolder(), "keybinds.json"), KeybindSettings::register);
 
-        BBSSettings.language.postCallback((v, f) -> reloadLanguage(((ValueLanguage) v).get()));
+        BBSSettings.language.postCallback((v, f) -> reloadLanguage(getLanguageKey()));
         BBSSettings.editorSeconds.postCallback((v, f) ->
         {
             if (dashboard != null && dashboard.getPanels().panel instanceof UIFilmPanel panel)
@@ -359,6 +367,48 @@ public class BBSModClient implements ClientModInitializer
             {
                 BBSRendering.renderCoolStuff(context);
             }
+
+            if (BBSSettings.chromaSkyEnabled.get())
+            {
+                float d = BBSSettings.chromaSkyBillboard.get();
+
+                if (d > 0)
+                {
+                    MatrixStack stack = context.matrixStack();
+                    Color color = Colors.COLOR.set(BBSSettings.chromaSkyColor.get());
+
+                    stack.push();
+
+                    MatrixStack.Entry peek = stack.peek();
+
+                    peek.getPositionMatrix().identity();
+                    peek.getNormalMatrix().identity();
+                    stack.translate(0F, 0F, -d);
+
+                    RenderSystem.enableDepthTest();
+                    BufferBuilder builder = Tessellator.getInstance().getBuffer();
+
+                    builder.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR);
+
+                    float fov = MinecraftClient.getInstance().options.getFov().getValue();
+                    float dd = d * (float) Math.pow(fov / 40F, 2F);
+
+                    Draw.fillQuad(builder, stack,
+                        -dd, -dd, 0,
+                        dd, -dd, 0,
+                        dd, dd, 0,
+                        -dd, dd, 0,
+                        color.r, color.g, color.b, 1F
+                    );
+
+                    RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+
+                    BufferRenderer.drawWithGlobalProgram(builder.end());
+                    RenderSystem.disableDepthTest();
+
+                    stack.pop();
+                }
+            }
         });
 
         WorldRenderEvents.LAST.register((context) ->
@@ -375,7 +425,6 @@ public class BBSModClient implements ClientModInitializer
             films = new Films();
 
             ClientNetwork.resetHandshake();
-            BBSResources.reset();
             films.reset();
             cameraController.reset();
         });
@@ -393,6 +442,8 @@ public class BBSModClient implements ClientModInitializer
             {
                 films.updateEndWorld();
             }
+
+            BBSResources.tick();
         });
 
         ClientTickEvents.END_CLIENT_TICK.register((client) ->
@@ -413,8 +464,6 @@ public class BBSModClient implements ClientModInitializer
                 gunItemRenderer.update();
                 textures.update();
             }
-
-            BBSResources.update();
 
             while (keyDashboard.wasPressed()) UIScreen.open(getDashboard());
             while (keyItemEditor.wasPressed()) this.keyOpenModelBlockEditor(mc);
@@ -634,14 +683,7 @@ public class BBSModClient implements ClientModInitializer
         }
         else
         {
-            UIFilmPanel panel = dashboard.getPanel(UIFilmPanel.class);
-
-            dashboard.setPanel(panel);
-
-            if (!panel.overlay.canBeSeen())
-            {
-                panel.openOverlay.clickItself();
-            }
+            dashboard.setPanel(dashboard.getPanel(UIFilmPanel.class));
         }
     }
 
@@ -656,13 +698,23 @@ public class BBSModClient implements ClientModInitializer
         }
     }
 
-    public static void reloadLanguage(String language)
+    public static String getLanguageKey()
     {
-        if (language.isEmpty())
+        return getLanguageKey(BBSSettings.language.get());
+    }
+
+    public static String getLanguageKey(String key)
+    {
+        if (key.isEmpty())
         {
-            language = MinecraftClient.getInstance().options.language;
+            key = MinecraftClient.getInstance().options.language;
         }
 
+        return key;
+    }
+
+    public static void reloadLanguage(String language)
+    {
         l10n.reload(language, BBSMod.getProvider());
     }
 }

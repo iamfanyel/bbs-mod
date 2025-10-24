@@ -34,7 +34,11 @@
         "iris.JcppProcessorMixin",
         "iris.ShaderPackMixin",
         "iris.IrisMixin",
-        "SimpleOptionMixin"
+        "iris.SliderElementWidgetMixin",
+        "iris.StringElementWidgetInvoker",
+        "SimpleOptionMixin",
+        "BlockEntityRenderDispatcherMixin",
+        "WorldMixin"
     ],
     "injectors": {
         "defaultRequire": 1

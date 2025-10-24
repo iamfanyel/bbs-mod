@@ -5,7 +5,8 @@ import mchorse.bbs_mod.data.types.BaseType;
 import mchorse.bbs_mod.data.types.MapType;
 import mchorse.bbs_mod.forms.forms.BodyPart;
 import mchorse.bbs_mod.forms.forms.Form;
-import mchorse.bbs_mod.forms.properties.IFormProperty;
+import mchorse.bbs_mod.settings.values.base.BaseValue;
+import mchorse.bbs_mod.settings.values.base.BaseValueBasic;
 import mchorse.bbs_mod.utils.CollectionUtils;
 import mchorse.bbs_mod.utils.StringUtils;
 
@@ -62,6 +63,45 @@ public class FormUtils
         return form;
     }
 
+    public static Form getForm(BaseValue property)
+    {
+        if (property.getParent() instanceof Form form)
+        {
+            return form;
+        }
+
+        return null;
+    }
+
+    public static Form getForm(Form form, String path)
+    {
+        String[] split = path.split(PATH_SEPARATOR);
+
+        for (String s : split)
+        {
+            try
+            {
+                int index = Integer.parseInt(s);
+                BodyPart safe = CollectionUtils.getSafe(form.parts.getAll(), index);
+
+                if (safe != null)
+                {
+                    form = safe.getForm();
+                }
+                else
+                {
+                    break;
+                }
+            }
+            catch (Exception e)
+            {
+                break;
+            }
+        }
+
+        return form;
+    }
+
     public static String getPath(Form form)
     {
         if (form.getParent() == null)
@@ -100,12 +140,12 @@ public class FormUtils
 
     /* Form properties utils */
 
-    public static String getPropertyPath(IFormProperty property)
+    public static String getPropertyPath(BaseValue property)
     {
         path.clear();
-        path.add(property.getKey());
+        path.add(property.getId());
 
-        Form form = property.getForm();
+        Form form = getForm(property);
 
         while (form != null)
         {
@@ -161,11 +201,11 @@ public class FormUtils
             return;
         }
 
-        for (IFormProperty property : form.getProperties().values())
+        for (BaseValue property : form.getProperties().values())
         {
-            if (property.canCreateChannel())
+            if (property.isVisible())
             {
-                properties.add(StringUtils.combinePaths(prefix, property.getKey()));
+                properties.add(StringUtils.combinePaths(prefix, property.getId()));
             }
         }
 
@@ -179,7 +219,7 @@ public class FormUtils
         }
     }
 
-    public static IFormProperty getProperty(Form form, String path)
+    public static BaseValueBasic getProperty(Form form, String path)
     {
         if (form == null)
         {
@@ -196,7 +236,7 @@ public class FormUtils
         for (int i = 0; i < segments.length; i++)
         {
             String segment = segments[i];
-            IFormProperty property = form.getProperties().get(segment);
+            BaseValueBasic property = form.getProperties().get(segment);
 
             if (property == null)
             {
